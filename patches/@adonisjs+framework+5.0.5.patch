@@ -1,0 +1,17 @@
+diff --git a/node_modules/@adonisjs/framework/src/Server/index.js b/node_modules/@adonisjs/framework/src/Server/index.js
+index c078486..5d59b30 100644
+--- a/node_modules/@adonisjs/framework/src/Server/index.js
++++ b/node_modules/@adonisjs/framework/src/Server/index.js
+@@ -239,7 +239,11 @@ class Server {
+    * @private
+    */
+   async _handleException (error, ctx) {
+-    error.status = error.status || 500
++    if (typeof error !== 'object') {
++      const msg = typeof error === 'string' ? error : '(unknown error)';
++      error = new Error(msg);
++    }
++    error.status = error.status || 500;
+ 
+     try {
+       const handler = ioc.make(ioc.use(this._exceptionHandlerNamespace))
